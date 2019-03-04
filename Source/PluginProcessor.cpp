@@ -24,6 +24,11 @@ MsutilityAudioProcessor::MsutilityAudioProcessor()
                        )
 #endif
 {
+    stereoWidth = new AudioParameterFloat("stereoWidth", "Stereo Width", 0.0f, 2.0f, 1.0f);
+    addParameter(stereoWidth);
+    
+    inSelection = new AudioParameterChoice("inSelection", "Input Type", {"Mid Side", "Stereo"}, 1);
+    addParameter(inSelection);
 }
 
 MsutilityAudioProcessor::~MsutilityAudioProcessor()
@@ -134,28 +139,44 @@ void MsutilityAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
+   
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    
+    // Storing the array of the samples for each channel
+    auto* channelDataL = buffer.getWritePointer (0);
+    auto* channelDataR = buffer.getWritePointer (1);
+    
+    // Loop runs through the array of samples
+    for (int i = 0; i < buffer.getNumSamples(); ++i)
     {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
+        float side;
+        float mid;
+        
+        // Getting the value from the user parameter and storing as a new variable
+        float sWidth = stereoWidth->get();
+        
+        int inSel = inSelection->getIndex();
+        
+        if (inSel == 1)
+        {
+            // Stereo Image Widening (Encoding stereo to MS and giving it a width control)
+            side = sWidth *(0.5 * (channelDataL[i] - channelDataR[i]));
+            mid = (2.0 - sWidth) *(0.5 * (channelDataL[i] + channelDataR[i]));
+        }
+        else
+        {
+            side = sWidth * (channelDataL[i] - channelDataR[i]);
+            mid = (2.0 - sWidth) * (channelDataL[i] + channelDataR[i]);
+        }
+        //Decoding MS
+        channelDataL[i] = mid + side;
+        channelDataR[i] = mid - side;
     }
+        
+
+        
+   
 }
 
 //==============================================================================
@@ -166,7 +187,7 @@ bool MsutilityAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* MsutilityAudioProcessor::createEditor()
 {
-    return new MsutilityAudioProcessorEditor (*this);
+    return new GenericAudioProcessorEditor (this);
 }
 
 //==============================================================================
