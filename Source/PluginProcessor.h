@@ -11,7 +11,7 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
-
+#include "../../Maximilian/maximilian.h"
 //==============================================================================
 /**
 */
@@ -60,7 +60,12 @@ public:
     AudioParameterChoice* outSelection;
     AudioParameterBool* invPolarityL;
     AudioParameterBool* invPolarityR;
+    AudioParameterBool* stereoWidthMod;
+    AudioParameterFloat* modRate;
+    AudioParameterFloat* modAmount;
 private:
+    
+    maxiOsc lfo;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MsutilityAudioProcessor)
 };

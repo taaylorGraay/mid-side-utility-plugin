@@ -10,6 +10,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "../../Maximilian/maximilian.h"
 
 //==============================================================================
 MsutilityAudioProcessor::MsutilityAudioProcessor()
@@ -33,11 +34,20 @@ MsutilityAudioProcessor::MsutilityAudioProcessor()
     outSelection = new AudioParameterChoice("outSelection", "Output Type", {"Mid Side", "Stereo"}, 1);
     addParameter(outSelection);
     
-    invPolarityL = new AudioParameterBool("invPolarityL", "+/- Left Channel)", 0);
+    invPolarityL = new AudioParameterBool("invPolarityL", "+/- Left Channel", 0);
     addParameter(invPolarityL);
     
-    invPolarityR = new AudioParameterBool("invPolarityR", "+/- Right Channel)", 0);
+    invPolarityR = new AudioParameterBool("invPolarityR", "+/- Right Channel", 0);
     addParameter(invPolarityR);
+    
+    stereoWidthMod = new AudioParameterBool("stereoWidthMod", "Stereo Width Modulator", 0);
+    addParameter(stereoWidthMod);
+    
+    modRate = new AudioParameterFloat("modRate", "Modulation Rate (Hz)", 0.0f, 20.0f, 1.0f);
+    addParameter(modRate);
+    
+    modAmount = new AudioParameterFloat("modAmount", "Modulation Amount", 0.0f, 1.0f, 0.5f);
+    addParameter(modAmount);
 }
 
 MsutilityAudioProcessor::~MsutilityAudioProcessor()
@@ -167,6 +177,14 @@ void MsutilityAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
         
         int inSel = inSelection->getIndex();
         
+        float modFrequency = modRate->get();
+        float modDepth = modAmount->get();
+        int sWidthMod = stereoWidthMod->get();
+        if (sWidthMod == 1)
+        {
+            float mod = lfo.sinewave(modFrequency) * modDepth;
+            sWidth = sWidth + mod;
+        }
         if (inSel == 1)
         {
             // Stereo Image Widening (Encoding stereo to MS and giving it a width control)
@@ -215,8 +233,7 @@ void MsutilityAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
             channelDataR[i] = channelDataR[i] * -1;
         }
     }
-        
-
+    
         
    
 }
