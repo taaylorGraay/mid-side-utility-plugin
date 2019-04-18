@@ -11,7 +11,8 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "../../Maximilian/maximilian.h"
+#include "maximilian.h"
+
 //==============================================================================
 /**
 */

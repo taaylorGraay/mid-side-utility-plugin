@@ -10,7 +10,8 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "../../Maximilian/maximilian.h"
+#include "maximilian.h"
+
 
 //==============================================================================
 MsutilityAudioProcessor::MsutilityAudioProcessor()
