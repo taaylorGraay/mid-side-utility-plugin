@@ -32,7 +32,7 @@ MsutilityAudioProcessor::MsutilityAudioProcessor()
     inSelection = new AudioParameterChoice("inSelection", "Input Type", {"Mid Side", "Stereo"}, 1);
     addParameter(inSelection);
     
-    outSelection = new AudioParameterChoice("outSelection", "Output Type", {"Mid Side", "Stereo"}, 1);
+    outSelection = new AudioParameterChoice("outSelection", "Output Type", {"Mid Side", "Stereo", "Mids", "Sides"}, 1);
     addParameter(outSelection);
     
     invPolarityL = new AudioParameterBool("invPolarityL", "+/- Left Channel", 0);
@@ -202,14 +202,24 @@ void MsutilityAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
         
         if (outSel ==1)
         {
-            //Decoding MS
+            
             channelDataL[i] = mid + side;
             channelDataR[i] = mid - side;
+        }
+        else if (outSel ==0)
+        {   //Decoding MS
+            channelDataL[i] = side;
+            channelDataR[i] = mid;
+        }
+        else if (outSel ==2)
+        {
+            channelDataL[i] = mid;
+            channelDataR[i] = mid;
         }
         else
         {
             channelDataL[i] = side;
-            channelDataR[i] = mid;
+            channelDataR[i] = side;
         }
         
         int invertPolL = invPolarityL->get();
