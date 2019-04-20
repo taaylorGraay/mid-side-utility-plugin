@@ -17,7 +17,10 @@
 //==============================================================================
 /**
 */
-class MsutilityAudioProcessorEditor  : public AudioProcessorEditor
+class MsutilityAudioProcessorEditor  : public AudioProcessorEditor,
+private Slider::Listener,
+private ComboBox::Listener,
+private Button::Listener
 {
 public:
     MsutilityAudioProcessorEditor (MsutilityAudioProcessor&);
@@ -28,9 +31,20 @@ public:
     void resized() override;
 
 private:
+    
+    void sliderValueChanged(Slider* slider) override;
+    
+    void comboBoxChanged(ComboBox*) override;
+    
+    void buttonClicked(Button* button) override;
+    
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     MsutilityAudioProcessor& processor;
+    
+    Slider stereoWidth;
+    ComboBox inSelection;
+    ToggleButton invPolarityL;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MsutilityAudioProcessorEditor)
 };

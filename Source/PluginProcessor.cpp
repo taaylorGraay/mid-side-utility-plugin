@@ -257,6 +257,7 @@ bool MsutilityAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* MsutilityAudioProcessor::createEditor()
 {
+    //return new MsutilityAudioProcessorEditor (*this);
     return new GenericAudioProcessorEditor (this);
 }
 

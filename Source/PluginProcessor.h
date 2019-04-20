@@ -64,6 +64,10 @@ public:
     AudioParameterBool* stereoWidthMod;
     AudioParameterFloat* modRate;
     AudioParameterFloat* modAmount;
+    
+    float sWidth;
+    int inSel;
+    int invertPolL
 private:
     
     maxiOsc lfo;
