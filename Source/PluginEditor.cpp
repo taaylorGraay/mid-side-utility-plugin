@@ -21,7 +21,6 @@ MsutilityAudioProcessorEditor::MsutilityAudioProcessorEditor (MsutilityAudioProc
     
     
     // Stereo Width Slider
-    
     stereoWidth.setSliderStyle(Slider::LinearHorizontal);
     
     stereoWidth.setRange(0.0f, 2.0f, 0.0f);
@@ -31,6 +30,52 @@ MsutilityAudioProcessorEditor::MsutilityAudioProcessorEditor (MsutilityAudioProc
     stereoWidth.addListener(this);
     
     addAndMakeVisible(&stereoWidth);
+    
+    stereoWidthLabel.setText("Stereo Width", dontSendNotification);
+    
+    addAndMakeVisible(stereoWidthLabel);
+    
+    stereoWidthLabel.attachToComponent (&stereoWidth, true);
+    
+    
+    
+    // Stereo Width Modulation Rate
+    modRate.setSliderStyle(Slider::LinearHorizontal);
+    
+    modRate.setRange(0.0f, 20.0f, 0.0f);
+    
+    modRate.setValue(1.0f);
+    
+    modRate.addListener(this);
+    
+    modRate.setTextValueSuffix("Hz");
+    
+    addAndMakeVisible(&modRate);
+    
+    modRateLabel.setText("Modulation Rate", dontSendNotification);
+    
+    addAndMakeVisible(modRateLabel);
+    
+    modRateLabel.attachToComponent (&modRate, true);
+    
+    
+    
+    // Stereo Width Modulation Amount
+    modAmount.setSliderStyle(Slider::LinearHorizontal);
+    
+    modAmount.setRange(0.0f, 1.0f, 0.0f);
+    
+    modAmount.setValue(0.5f);
+    
+    modAmount.addListener(this);
+    
+    addAndMakeVisible(&modAmount);
+    
+    modAmountLabel.setText("Modulation Amount", dontSendNotification);
+    
+    addAndMakeVisible(modAmountLabel);
+    
+    modAmountLabel.attachToComponent (&modAmount, true);
     
     
     
@@ -46,14 +91,60 @@ MsutilityAudioProcessorEditor::MsutilityAudioProcessorEditor (MsutilityAudioProc
     
     addAndMakeVisible(&inSelection);
     
+    inSelectionLabel.setText("Input Type", dontSendNotification);
+    
+    addAndMakeVisible(inSelectionLabel);
+    
+    inSelectionLabel.attachToComponent (&inSelection, true);
     
     
-    //Invert Polarity Left Toggle Button
+    
+    // Output Selection Combo Box
+    outSelection.addItem("Mid Side", 1);
+    outSelection.addItem("Stereo", 2);
+    outSelection.addItem("Mids", 3);
+    outSelection.addItem("Sides", 4);
+    
+    outSelection.setJustificationType(Justification::centred);
+    
+    outSelection.setSelectedItemIndex(1);
+    
+    outSelection.addListener(this);
+    
+    addAndMakeVisible(&outSelection);
+    
+    outSelectionLabel.setText("Output Type", dontSendNotification);
+    
+    addAndMakeVisible(outSelectionLabel);
+    
+    outSelectionLabel.attachToComponent (&outSelection, true);
+    
+    
+    
+    // Stereo Width Modulation Toggle Button
+    stereoWidthMod.setButtonText("Stereo Width Modulator");
+    
+    stereoWidthMod.addListener(this);
+    
+    addAndMakeVisible(&stereoWidthMod);
+    
+    
+    
+    // Invert Polarity Left Toggle Button
     invPolarityL.setButtonText("+/- Left Channel");
     
     invPolarityL.addListener(this);
     
     addAndMakeVisible(&invPolarityL);
+    
+    
+    
+    // Invert Polarity Right Toggle Button
+    invPolarityR.setButtonText("+/- Right Channel");
+    
+    invPolarityR.addListener(this);
+    
+    addAndMakeVisible(&invPolarityR);
 }
 
 MsutilityAudioProcessorEditor::~MsutilityAudioProcessorEditor()
@@ -68,7 +159,7 @@ void MsutilityAudioProcessorEditor::paint (Graphics& g)
 
     g.setColour (Colours::white);
     g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), Justification::centred, 1);
+    g.drawFittedText ("MS Utility", getLocalBounds(), Justification::centred, 1);
 }
 
 void MsutilityAudioProcessorEditor::resized()
@@ -77,8 +168,13 @@ void MsutilityAudioProcessorEditor::resized()
     // subcomponents in your editor..
     
     stereoWidth.setBounds
+    modRate.setBounds
+    modAmount.setBounds
+    stereoWidthMod.setBounds
     inSelection.setBounds
+    outSelection.setBounds
     invPolarityL.setBounds
+    invPolarityR.setBounds
 }
 
 

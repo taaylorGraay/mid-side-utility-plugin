@@ -43,8 +43,20 @@ private:
     MsutilityAudioProcessor& processor;
     
     Slider stereoWidth;
+    Label stereoWidthLabel;
+    Slider modRate;
+    Label modRateLabel;
+    Slider modAmount;
+    Label modAmountLabel;
     ComboBox inSelection;
+    Label inSelectionLabel;
+    ComboBox outSelection;
+    Label outSelectionLabel;
+    ToggleButton stereoWidthMod;
     ToggleButton invPolarityL;
+    ToggleButton invPolarityR;
+    
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MsutilityAudioProcessorEditor)
 };
