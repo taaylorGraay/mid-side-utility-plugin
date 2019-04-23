@@ -20,7 +20,8 @@
 class MsutilityAudioProcessorEditor  : public AudioProcessorEditor,
 private Slider::Listener,
 private ComboBox::Listener,
-private Button::Listener
+private Button::Listener,
+private Timer
 {
 public:
     MsutilityAudioProcessorEditor (MsutilityAudioProcessor&);
@@ -29,7 +30,9 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+    void timerCallback();
 
+    
 private:
     
     void sliderValueChanged(Slider* slider) override;
@@ -37,6 +40,8 @@ private:
     void comboBoxChanged(ComboBox*) override;
     
     void buttonClicked(Button* button) override;
+    
+    
     
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.

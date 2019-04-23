@@ -56,14 +56,14 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    AudioParameterFloat* stereoWidth;
+    /*AudioParameterFloat* stereoWidth;
     AudioParameterChoice* inSelection; 
     AudioParameterChoice* outSelection;
     AudioParameterBool* invPolarityL;
     AudioParameterBool* invPolarityR;
     AudioParameterBool* stereoWidthMod;
     AudioParameterFloat* modRate;
-    AudioParameterFloat* modAmount;
+    AudioParameterFloat* modAmount;*/
     
     float sWidth;
     float modFrequency;

@@ -26,7 +26,7 @@ MsutilityAudioProcessor::MsutilityAudioProcessor()
                        )
 #endif
 {
-    stereoWidth = new AudioParameterFloat("stereoWidth", "Stereo Width", 0.0f, 2.0f, 1.0f);
+    /*stereoWidth = new AudioParameterFloat("stereoWidth", "Stereo Width", 0.0f, 2.0f, 1.0f);
     addParameter(stereoWidth);
     
     inSelection = new AudioParameterChoice("inSelection", "Input Type", {"Mid Side", "Stereo"}, 1);
@@ -48,7 +48,7 @@ MsutilityAudioProcessor::MsutilityAudioProcessor()
     addParameter(modRate);
     
     modAmount = new AudioParameterFloat("modAmount", "Modulation Amount", 0.0f, 1.0f, 0.5f);
-    addParameter(modAmount);
+    addParameter(modAmount);*/
 }
 
 MsutilityAudioProcessor::~MsutilityAudioProcessor()
@@ -174,18 +174,20 @@ void MsutilityAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
         float mid;
         
         // Getting the value from the user parameter and storing as a new variable
-        float sWidth = stereoWidth->get();
+        /*float sWidth = stereoWidth->get();
         
         int inSel = inSelection->getIndex();
         
         float modFrequency = modRate->get();
         float modDepth = modAmount->get();
-        int sWidthMod = stereoWidthMod->get();
+        int sWidthMod = stereoWidthMod->get();*/
+        
         if (sWidthMod == 1)
         {
             float mod = lfo.sinewave(modFrequency) * modDepth;
-            sWidth = sWidth + mod;
+            sWidth = mod + 1.0f;
         }
+        
         if (inSel == 1)
         {
             // Stereo Image Widening (Encoding stereo to MS and giving it a width control)
@@ -198,7 +200,7 @@ void MsutilityAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
             mid = (2.0 - sWidth) * (channelDataL[i] + channelDataR[i]);
         }
         
-        int outSel = outSelection->getIndex();
+       // int outSel = outSelection->getIndex();
         
         if (outSel ==1)
         {
@@ -208,8 +210,8 @@ void MsutilityAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
         }
         else if (outSel ==0)
         {   //Decoding MS
-            channelDataL[i] = side;
-            channelDataR[i] = mid;
+            channelDataL[i] = mid;
+            channelDataR[i] = side;
         }
         else if (outSel ==2)
         {
@@ -222,7 +224,7 @@ void MsutilityAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
             channelDataR[i] = side;
         }
         
-        int invertPolL = invPolarityL->get();
+        //int invertPolL = invPolarityL->get();
         
         if (invertPolL == 0)
         {
@@ -233,7 +235,7 @@ void MsutilityAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
             channelDataL[i] = channelDataL[i] * -1;
         }
         
-        int invertPolR = invPolarityR->get();
+        //int invertPolR = invPolarityR->get();
         
         if (invertPolR == 0)
         {
@@ -257,8 +259,8 @@ bool MsutilityAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* MsutilityAudioProcessor::createEditor()
 {
-    //return new MsutilityAudioProcessorEditor (*this);
-    return new GenericAudioProcessorEditor (this);
+    return new MsutilityAudioProcessorEditor (*this);
+    //return new GenericAudioProcessorEditor (this);
 }
 
 //==============================================================================
