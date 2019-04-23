@@ -34,3 +34,9 @@ TGRAY200@caledonian.ac.uk
 ## Who maintains and contributes to the project?
 
 This project has been maintained and contributed to by Taylor Gray, student at Glasgow Caledonian University.
+
+## Appendices
+
+### Appendix A
+
+Maximillian files were used.
